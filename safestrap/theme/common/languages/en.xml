@@ -293,7 +293,7 @@
 		<string name="rb_recovery_btn">Recovery</string>
 		<string name="rb_bootloader_btn">Bootloader</string>
 		<string name="rb_download_btn">Download</string>
-		<string name="rb_edl_btn">Edl</string>
+		<string name="rb_edl_btn">EDL</string>
 		<string name="turning_off">Turning Off...</string>
 		<string name="swipe_power_off">Swipe to Power Off</string>
 		<string name="swipe_power_off_s">Power Off</string>
@@ -317,6 +317,7 @@
 		<string name="settings_gen_s_hdr">General</string>
 		<string name="settings_gen_btn">General</string>
 		<string name="use_rmrf_chk">Use rm -rf instead of formatting</string>
+		<string name="auto_reflashtwrp_chk">Automatically Reflash TWRP after flashing a ROM</string>
 		<string name="use24clock_chk">Use 24-hour clock</string>
 		<string name="rev_navbar_chk">Reversed navbar layout</string>
 		<string name="simact_chk">Simulate actions for theme testing</string>
@@ -506,9 +507,16 @@
 		<string name="install_complete">Install Complete</string>
 		<string name="unpack_error">Error unpacking image.</string>
 		<string name="repack_error">Error repacking image.</string>
+		<string name="modified_ramdisk_error">ramdisk files have been modified, unable to create ramdisk to flash, fastboot boot twrp and try this option again or use the Install Recovery Ramdisk option.</string>
+		<string name="create_ramdisk_error">failed to create ramdisk to flash.</string>
 		<string name="unpacking_image">Unpacking {1}...</string>
 		<string name="repacking_image">Repacking {1}...</string>
 		<string name="repack_image_hdr">Select Image</string>
+		<string name="repack_overwrite_warning">If device was previously rooted, then root has been overwritten and will need to be reinstalled.</string>
+		<string name="reflash_twrp">Flash Current TWRP</string>
+		<string name="reflash_twrp_confirm">Flash Current TWRP?</string>
+		<string name="reflashing_twrp">Flashing TWRP...</string>
+		<string name="reflash_twrp_complete">Done flashing TWRP</string>
 		<string name="fix_recovery_loop">Fix Recovery Bootloop</string>
 		<string name="fix_recovery_loop_confirm">Fix Recovery Bootloop?</string>
 		<string name="fixing_recovery_loop">Fixing Recovery Bootloop...</string>
@@ -733,7 +741,9 @@
 		<string name="twrp_adbbu_option">--twrp option is required to enable twrp adb backup</string>
 		<string name="partition_not_found">path: {1} not found in partititon list</string>
 		<string name="copy_kernel_log">Copied kernel log to {1}</string>
+		<string name="copy_logcat">Copied logcat to {1}</string>
 		<string name="include_kernel_log">Include Kernel Log</string>
+		<string name="include_logcat">Include Logcat</string>
 		<string name="sha2_chk">Use SHA2 for hashing</string>
 		<string name="unable_set_boot_slot">Error changing bootloader boot slot to {1}</string>
 		<string name="unmount_sys_install">Unmount System before installing a ZIP</string>
@@ -744,6 +754,7 @@
 		<string name="flash_ab_both_slots">Flash to both slots</string>
 		<string name="ozip_decrypt_decryption">Starting Ozip Decryption...</string>
 		<string name="ozip_decrypt_finish">Ozip Decryption Finished!</string>
+		<string name="data_media_fbe_msg">TWRP will not recreate /data/media on an FBE device. Please reboot into your rom to create /data/media</string>
 		<string name="restore_system_context">Unable to get default context for {1} -- Android may not boot.</string>
 		<string name="change_twrp_folder_btn">Change TWRP folder</string>
 		<string name="change_twrp_folder_on_process">Changing TWRP folder</string>
