@@ -2906,13 +2906,6 @@
 		</page>
 
 		<page name="reboot">
-			<action>
-				<action function="checkforapp"></action>
-				<action function="page">reboot2</action>
-			</action>
-		</page>
-
-		<page name="reboot2">
 			<template name="page"/>
 
 			<text style="text_l">
@@ -3040,11 +3033,11 @@
 
 			<text style="text_m">
 				<condition var1="tw_has_boot_slots" var2="1"/>
-				<placement x="%center_x%" y="%row15_y%" placement="5"/>
+				<placement x="%center_x%" y="%row17_y%" placement="5"/>
 				<text>{@current_boot_slot=Current Slot: %tw_active_slot%}</text>
 			</text>
 
-			<button style="main_button_half_height">
+			<button style="main_button">
 				<condition var1="tw_has_boot_slots" var2="1"/>
 				<placement x="%indent%" y="%row19_y%"/>
 				<text>{@boot_slot_a=Slot A}</text>
@@ -3060,7 +3053,7 @@
 				</actions>
 			</button>
 
-			<button style="main_button_half_height">
+			<button style="main_button">
 				<condition var1="tw_has_boot_slots" var2="1"/>
 				<placement x="%center_x%" y="%row19_y%"/>
 				<text>{@boot_slot_b=Slot B}</text>
@@ -3073,17 +3066,6 @@
 					<action function="set">tw_action_text2=</action>
 					<action function="set">tw_complete_text1={@changing_boot_slot_complete=Change Boot Slot Complete}</action>
 					<action function="page">action_page</action>
-				</actions>
-			</button>
-
-			<button style="main_button_half_height">
-				<condition var1="tw_app_install_status" var2="1"/>
-				<placement x="%indent%" y="%row22_y%"/>
-				<text>{@reboot_install_app_hdr=Install TWRP App}</text>
-				<actions>
-					<action function="set">tw_back=reboot</action>
-					<action function="set">tw_appinstall_title={@reboot_hdr=Reboot}</action>
-					<action function="page">installapp</action>
 				</actions>
 			</button>
 
