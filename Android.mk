@@ -1082,11 +1082,6 @@ ifdef SS_HIJACK_WRAPPER_BINARY
     include $(commands_TWRP_local_path)/safestrap/hijack-wrapper/Android.mk
 endif
 
-# bypasslkm
-ifdef SS_INCLUDE_BYPASSLKM
-    include $(commands_TWRP_local_path)/safestrap/bypasslkm/Android.mk
-endif
-
 # Call out to device-specific script
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-safestrap.mk
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-install.mk
