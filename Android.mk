@@ -1072,11 +1072,6 @@ ifeq ($(SS_INCLUDE_UEVENTMON), true)
     include $(commands_TWRP_local_path)/safestrap/ueventmon/Android.mk
 endif
 
-# delay-wrapper
-ifdef SS_DELAY_WRAPPER_BINARY
-    include $(commands_TWRP_local_path)/safestrap/delay-wrapper/Android.mk
-endif
-
 # Call out to device-specific script
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-safestrap.mk
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-install.mk
