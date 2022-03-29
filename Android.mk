@@ -1067,11 +1067,6 @@ ifeq ($(SS_INCLUDE_SPLASHMENU), true)
     include $(commands_TWRP_local_path)/safestrap/splashmenu/Android.mk
 endif
 
-# ueventmon
-ifeq ($(SS_INCLUDE_UEVENTMON), true)
-    include $(commands_TWRP_local_path)/safestrap/ueventmon/Android.mk
-endif
-
 # Call out to device-specific script
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-safestrap.mk
 include $(commands_TWRP_local_path)/safestrap/devices/common/build-install.mk
