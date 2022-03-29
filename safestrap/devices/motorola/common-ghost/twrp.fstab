@@ -1,8 +1,0 @@
-# mount point   fstype          device
-
-/datamedia    f2fs      /dev/block/mmcblk0p40-orig                          flags=display="Internal Storage";storage;backup=n;fsflags="inline_xattr"
-/data         f2fs      /dev/block/platform/msm_sdcc.1/by-name/userdata     fsflags="inline_xattr"
-/cache        ext4      /dev/block/platform/msm_sdcc.1/by-name/cache
-/system       ext4      /dev/block/platform/msm_sdcc.1/by-name/system       flags=usermrf
-/systemorig   ext4      /dev/block/mmcblk0p38-orig                          flags=hidden;usermrf
-/ss           f2fs      /dev/block/mmcblk0p40-orig                          flags=hidden;fsflags="inline_xattr"

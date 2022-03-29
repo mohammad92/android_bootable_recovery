@@ -1,8 +1,0 @@
-# mount point   fstype          device
-
-/datamedia    ext4      /dev/block/mmcblk0p23-orig                          flags=display="Internal Storage";storage;backup=n
-/data         ext4      /dev/block/platform/msm_sdcc.1/by-name/userdata
-/cache        ext4      /dev/block/platform/msm_sdcc.1/by-name/cache
-/system       ext4      /dev/block/platform/msm_sdcc.1/by-name/system       flags=usermrf
-/systemorig   ext4      /dev/block/mmcblk0p22-orig                          flags=hidden;usermrf
-/ss           ext4      /dev/block/mmcblk0p23-orig                          flags=hidden

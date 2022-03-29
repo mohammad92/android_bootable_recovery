@@ -1,8 +1,0 @@
-# mount point	fstype	device
-
-/sdcard	 	vfat	/dev/block/mmcblk0p12	    flags=display="Internal Storage";storage;wipeingui
-/data		ext4	/dev/block/mmcblk0p10
-/cache		ext4	/dev/block/mmcblk0p11
-/system		ext4	/dev/block/mmcblk0p9
-/systemorig     auto    /dev/block/mmcblk1p20-orig  flags=hidden
-/ss             vfat    /dev/block/mmcblk0p12       flags=hidden

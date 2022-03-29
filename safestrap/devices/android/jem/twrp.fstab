@@ -1,8 +1,0 @@
-# mount point	fstype	device
-
-/datamedia      ext4    /dev/block/mmcblk0p13-orig                                    flags=display="Internal Storage";storage;backup=n
-/data           ext4    /dev/block/platform/omap/omap_hsmmc.1/by-name/userdata
-/cache          ext4    /dev/block/platform/omap/omap_hsmmc.1/by-name/cache
-/system         ext4    /dev/block/platform/omap/omap_hsmmc.1/by-name/system     flags=usermrf
-/systemorig     ext4    /dev/block/mmcblk0p11-orig                                    flags=hidden;usermrf
-/ss             ext4    /dev/block/mmcblk0p13-orig                                    flags=hidden
