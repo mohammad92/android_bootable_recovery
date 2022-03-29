@@ -26,29 +26,7 @@ ifeq ($(BUILD_SAFESTRAP), true)
 endif
 
 ifeq ($(BUILD_SAFESTRAP), true)
-ifeq ($(SS_PRODUCT_MANUFACTURER), )
-    SS_PRODUCT_MANUFACTURER := $(shell echo $(PRODUCT_MANUFACTURER) | tr '[A-Z]' '[a-z]')
-endif
-
-SS_PRODUCT_MAKEFILE_LOC := $(commands_TWRP_local_path)/safestrap/devices/$(SS_PRODUCT_MANUFACTURER)/$(TARGET_DEVICE)
-
-# The extra blank line before *** is intentional to ensure it ends up on its own line
-define SS_MAKEFILE_WARNING_MSG
-
-****************************************************************************
-  Expected to find safestrap.mk at:
-    $(SS_PRODUCT_MAKEFILE_LOC)
-  Please fix this or set $(SS_PRODUCT_MANUFACTURER)/$(TARGET_DEVICE) to the following:
-    /safestrap/devices/
-****************************************************************************
-endef
-
-ifeq ($(wildcard $(SS_PRODUCT_MAKEFILE_LOC)/safestrap.mk),)
-    $(warning $(SS_MAKEFILE_WARNING_MSG))
-    $(error safestrap.mk selection failed; exiting)
-else
-    include $(SS_PRODUCT_MAKEFILE_LOC)/safestrap.mk
-endif
+    include $(commands_TWRP_local_path)/safestrap/safestrap.mk
 endif
 
 ifneq ($(project-path-for),)
@@ -643,62 +621,6 @@ ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 28; echo $$?),0)
 endif
 endif
 
-ifeq ($(BUILD_SAFESTRAP), true)
-# Safestrap virtual system size defaults
-ifneq ($(BOARD_DEFAULT_VIRT_SYSTEM_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_SIZE='"$(BOARD_DEFAULT_VIRT_SYSTEM_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_SIZE='"600"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_SYSTEM_MIN_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_MIN_SIZE='"$(BOARD_DEFAULT_VIRT_SYSTEM_MIN_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_MIN_SIZE='"600"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_SYSTEM_MAX_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_MAX_SIZE='"$(BOARD_DEFAULT_VIRT_SYSTEM_MAX_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_SYSTEM_MAX_SIZE='"1000"'
-endif
-# Safestrap virtual data size defaults
-ifneq ($(BOARD_DEFAULT_VIRT_DATA_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_SIZE='"$(BOARD_DEFAULT_VIRT_DATA_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_SIZE='"2000"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_DATA_MIN_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_MIN_SIZE='"$(BOARD_DEFAULT_VIRT_DATA_MIN_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_MIN_SIZE='"1000"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_DATA_MAX_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_MAX_SIZE='"$(BOARD_DEFAULT_VIRT_DATA_MAX_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_DATA_MAX_SIZE='"16000"'
-endif
-# Safestrap virtual cache size defaults
-ifneq ($(BOARD_DEFAULT_VIRT_CACHE_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_SIZE='"$(BOARD_DEFAULT_VIRT_CACHE_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_SIZE='"300"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_CACHE_MIN_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_MIN_SIZE='"$(BOARD_DEFAULT_VIRT_CACHE_MIN_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_MIN_SIZE='"300"'
-endif
-ifneq ($(BOARD_DEFAULT_VIRT_CACHE_MAX_SIZE),)
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_MAX_SIZE='"$(BOARD_DEFAULT_VIRT_CACHE_MAX_SIZE)"'
-else
-    LOCAL_CFLAGS += -DDEFAULT_VIRT_CACHE_MAX_SIZE='"1000"'
-endif
-# /datamedia/media mount location for multi-boot SD calculation
-ifeq ($(TW_SS_DATAMEDIA_MOUNT),)
-    TW_SS_DATAMEDIA_MOUNT := /datamedia
-endif
-LOCAL_CFLAGS += -DTW_SS_DATAMEDIA_MOUNT=$(TW_SS_DATAMEDIA_MOUNT)
-endif
-
 ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 26; echo $$?),0)
     TWRP_REQUIRED_MODULES += ld.config.txt
     TWRP_REQUIRED_MODULES += init.recovery.ldconfig.rc
@@ -728,6 +650,10 @@ TW_THEME_VERSION := $(shell grep TW_THEME_VERSION bootable/recovery/variables.h 
 LOCAL_POST_INSTALL_CMD += \
     sed -i "s/{themeversion}/$(TW_THEME_VERSION)/" $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)splash.xml; \
     sed -i "s/{themeversion}/$(TW_THEME_VERSION)/" $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)ui.xml;
+
+ifeq ($(BUILD_SAFESTRAP), true)
+    include $(commands_TWRP_local_path)/safestrap/safestrap-defines.mk
+endif
 
 include $(BUILD_EXECUTABLE)
 
@@ -1057,19 +983,7 @@ include $(commands_TWRP_local_path)/injecttwrp/Android.mk \
     $(commands_TWRP_local_path)/attr/Android.mk
 
 ifeq ($(BUILD_SAFESTRAP), true)
-# 2nd-init
-ifeq ($(SS_INCLUDE_2NDINIT), true)
-  include $(commands_TWRP_local_path)/safestrap/2nd-init/Android.mk
-endif
-
-# splashmenu
-ifeq ($(SS_INCLUDE_SPLASHMENU), true)
-    include $(commands_TWRP_local_path)/safestrap/splashmenu/Android.mk
-endif
-
-# Call out to device-specific script
-include $(commands_TWRP_local_path)/safestrap/devices/common/build-safestrap.mk
-include $(commands_TWRP_local_path)/safestrap/devices/common/build-install.mk
+    include $(commands_TWRP_local_path)/safestrap/Android.mk
 endif
 
 ifeq ($(shell test $(PLATFORM_SDK_VERSION) -lt 24; echo $$?),0)

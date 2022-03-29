@@ -14,12 +14,12 @@ BUILD_SAFESTRAP_CMD := \
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin && \
 	cp -p $(SS_COMMON)/flags/* $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/flags/ && \
 	cp -p $(SS_COMMON)/bbx $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/bbx && \
-	cp -p $(SS_COMMON)/devices/common/2nd-init-files/* $(PRODUCT_OUT)/2nd-init-files && \
-	cp -p $(SS_COMMON)/devices/common/2nd-init-files/fixboot.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
-	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
-	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/ && \
-	cp -p $(SS_COMMON)/devices/common/APP/* $(PRODUCT_OUT)/APP/ && \
-	cp -p $(SS_COMMON)/devices/common/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
+	cp -p $(SS_COMMON)/2nd-init-files/* $(PRODUCT_OUT)/2nd-init-files && \
+	cp -p $(SS_COMMON)/2nd-init-files/fixboot.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
+	cp -p $(SS_COMMON)/2nd-init-files/ss_function.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
+	cp -p $(SS_COMMON)/2nd-init-files/ss_function.sh $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/ && \
+	cp -p $(SS_COMMON)/APP/* $(PRODUCT_OUT)/APP/ && \
+	cp -p $(SS_COMMON)/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
 	cp -fr $(SS_COMMON)/sbin-extras/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 
 include $(SS_COMMON)/devices/$(SS_PRODUCT_MANUFACTURER)/$(TARGET_DEVICE)/build-safestrap.mk
