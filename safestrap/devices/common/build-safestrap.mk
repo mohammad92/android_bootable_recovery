@@ -6,12 +6,10 @@ SS_COMMON := $(commands_TWRP_local_path)/safestrap
 BUILD_SAFESTRAP_CMD := \
 	rm -rf $(PRODUCT_OUT)/2nd-init-files && \
 	rm -rf $(PRODUCT_OUT)/APP && \
-	rm -rf $(PRODUCT_OUT)/install-files && \
 	mkdir -p $(PRODUCT_OUT)/2nd-init-files && \
 	mkdir -p $(PRODUCT_OUT)/APP && \
 	mkdir -p $(PRODUCT_OUT)/install-files/bin && \
 	mkdir -p $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/flags && \
-	mkdir -p $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/res && \
 	mkdir -p $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/rootfs && \
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin && \
 	cp -p $(SS_COMMON)/flags/* $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/flags/ && \
@@ -21,7 +19,8 @@ BUILD_SAFESTRAP_CMD := \
 	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
 	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/ && \
 	cp -p $(SS_COMMON)/devices/common/APP/* $(PRODUCT_OUT)/APP/ && \
-	cp -p $(SS_COMMON)/devices/common/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/
+	cp -p $(SS_COMMON)/devices/common/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
+	cp -fr $(SS_COMMON)/sbin-extras/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 
 include $(SS_COMMON)/devices/$(SS_PRODUCT_MANUFACTURER)/$(TARGET_DEVICE)/build-safestrap.mk
 
