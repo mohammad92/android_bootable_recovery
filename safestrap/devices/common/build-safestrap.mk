@@ -21,8 +21,7 @@ BUILD_SAFESTRAP_CMD := \
 	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
 	cp -p $(SS_COMMON)/devices/common/2nd-init-files/ss_function.sh $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/ && \
 	cp -p $(SS_COMMON)/devices/common/APP/* $(PRODUCT_OUT)/APP/ && \
-	cp -p $(SS_COMMON)/devices/common/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/ && \
-	cp -p $(SS_COMMON)/devices/common/splashscreen-res/$(DEVICE_RESOLUTION)/* $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/res/
+	cp -p $(SS_COMMON)/devices/common/sbin/* $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 
 include $(SS_COMMON)/devices/$(SS_PRODUCT_MANUFACTURER)/$(TARGET_DEVICE)/build-safestrap.mk
 

@@ -1,6 +1,5 @@
 BUILD_SAFESTRAP_CMD += && \
 	cp -fr $(SS_COMMON)/devices/samsung/msm8996-common/hijack $(PRODUCT_OUT)/install-files/bin/e2fsck && \
-	cp -fr $(SS_COMMON)/devices/samsung/msm8996-common/res/* $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/res/ && \
 	cp -fr $(SS_COMMON)/devices/samsung/msm8996-common/rootfs/* $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/rootfs/ && \
 	cp -fr $(SS_COMMON)/devices/samsung/msm8996-common/ss.config $(PRODUCT_OUT)/APP/ss.config && \
 	cp -fr $(SS_COMMON)/devices/samsung/msm8996-common/ss.config $(PRODUCT_OUT)/install-files/$(SS_LOC)/safestrap/ss.config && \
