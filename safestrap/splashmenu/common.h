@@ -32,16 +32,12 @@ void evt_exit();
 
 // Use KEY_* codes from <linux/input.h> or KEY_DREAM_* from "minui/minui.h code
 int ui_key_pressed(int key, int skipkey, int disablekey);  // returns >0 if the code is currently pressed
-int ui_text_visible();        // returns >0 if text log is currently visible
 void ui_show_text(int visible);
-void ui_clear_key_queue();
 
 // Write a message to the on-screen log shown with Alt-L (also to stderr).
 // The screen is small, and users may need to report these messages to support,
 // so keep the output short and not too cryptic.
 void ui_print(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-// same without args
-void ui_print_str(char *str);
 
 // Set the icon (normally the only thing visible besides the progress bar).
 enum {
@@ -75,12 +71,6 @@ enum {
   DISABLE,
   ENABLE
 };
-
-int  ui_create_bitmaps();
-void ui_free_bitmaps();
-
-//checkup
-int checkup_report(void);
 
 #ifdef __cplusplus
 }

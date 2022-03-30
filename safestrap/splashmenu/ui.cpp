@@ -38,9 +38,6 @@
 #define CHAR_WIDTH 10
 #define CHAR_HEIGHT 18
 
-//void gui_print(const char *fmt, ...);
-//void gui_print_overwrite(const char *fmt, ...);
-
 static pthread_mutex_t gUpdateMutex = PTHREAD_MUTEX_INITIALIZER;
 static gr_surface gBackgroundIcon[NUM_BACKGROUND_ICONS];
 static int gUiInitialized = 0;
@@ -260,12 +257,8 @@ void ui_init(void)
 
 void ui_final(void)
 {
-//    evt_exit();
-
     ui_show_text(0);
     gr_exit();
-
-    //ui_free_bitmaps();
 }
 
 void ui_set_background(int icon)
@@ -286,8 +279,6 @@ void ui_print(const char *fmt, ...)
 
     fputs(buf, stdout);
 
-//    gui_print("%s", buf);
-
     // This can get called before ui_init(), so be careful.
     pthread_mutex_lock(&gUpdateMutex);
     if (text_rows > 0 && text_cols > 0) {
@@ -305,48 +296,6 @@ void ui_print(const char *fmt, ...)
         update_screen_locked();
     }
     pthread_mutex_unlock(&gUpdateMutex);
-}
-
-void ui_print_overwrite(const char *fmt, ...)
-{
-    char buf[256];
-    va_list ap;
-    va_start(ap, fmt);
-    vsnprintf(buf, (text_cols - 1), fmt, ap);
-    va_end(ap);
-    //LOGI("ui_print_overwrite - starting text row %i\n", text_row);
-    fputs(buf, stdout);
-
-//    gui_print_overwrite("%s", buf);
-
-    text_col = 0;
-    // This can get called before ui_init(), so be careful.
-    pthread_mutex_lock(&gUpdateMutex);
-    if (text_rows > 0 && text_cols > 0) {
-        char *ptr;
-        for (ptr = buf; *ptr != '\0'; ++ptr) {
-            if (*ptr == '\n' || text_col >= text_cols) {
-                text[text_row][text_col] = '\0';
-                text_col = 0;
-                text_row = (text_row + 1) % text_rows;
-                if (text_row == text_top) text_top = (text_top + 1) % text_rows;
-            }
-            if (*ptr != '\n') text[text_row][text_col++] = *ptr;
-        }
-        text[text_row][text_col] = '\0';
-        // had to comment out as it was being thrown into the output
-		//LOGI("ui_print_overwrite - ending text row %i    ending text col%i\n", text_row, text_col); 
-        update_screen_locked();
-    }
-    pthread_mutex_unlock(&gUpdateMutex);
-}
-
-int ui_text_visible()
-{
-    pthread_mutex_lock(&gUpdateMutex);
-    int visible = show_text;
-    pthread_mutex_unlock(&gUpdateMutex);
-    return visible;
 }
 
 void ui_show_text(int visible)
@@ -370,10 +319,4 @@ int ui_key_pressed(int key, int skipkey, int disablekey)
         if (key_pressed[disablekey] != 0) return disablekey;
     }
     return 0;
-}
-
-void ui_clear_key_queue() {
-    pthread_mutex_lock(&key_queue_mutex);
-    key_queue_len = 0;
-    pthread_mutex_unlock(&key_queue_mutex);
 }

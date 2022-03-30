@@ -33,11 +33,7 @@
 #endif
 #endif
 
-#ifdef SPLASH_DELAY
 static unsigned long total_delay = SPLASH_DELAY;
-#else
-static unsigned long total_delay = 8;
-#endif
 
 /**
  * ui_finish()
