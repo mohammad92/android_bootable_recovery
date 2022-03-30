@@ -37,7 +37,7 @@ ifeq ($(TW_TARGET_USES_QCOM_BSP), true)
     else
       LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
     endif
-    LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
+    LOCAL_C_INCLUDES += $(RECOVERY_INCLUDE_DIR)
   else
     ifeq ($(TARGET_CUSTOM_KERNEL_HEADERS),)
       LOCAL_C_INCLUDES += $(RECOVERY_INCLUDE_DIR)
@@ -217,7 +217,7 @@ ifneq ($(TW_INCLUDE_JPEG),)
 endif
 LOCAL_STATIC_LIBRARIES += libpixelflinger_twrp
 ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 25; echo $$?),0)
-LOCAL_SHARED_LIBRARIES += libcutils liblog libutils
+LOCAL_SHARED_LIBRARIES += liblog
 endif
 LOCAL_MODULE_TAGS := eng
 LOCAL_MODULE := libminui_ss

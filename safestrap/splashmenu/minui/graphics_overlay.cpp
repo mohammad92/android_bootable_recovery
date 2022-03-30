@@ -43,8 +43,6 @@
 #define MDP_V4_0 400
 #define MAX_DISPLAY_DIM  2048
 
-#define PRINT_SCREENINFO 1
-
 static GRSurface* overlay_init(minui_backend*);
 static GRSurface* overlay_flip(minui_backend*);
 static void overlay_blank(minui_backend*, bool);
@@ -54,7 +52,6 @@ static GRSurface gr_framebuffer;
 static GRSurface* gr_draw = NULL;
 
 static fb_var_screeninfo vi;
-static fb_fix_screeninfo fi;
 static int fb_fd = -1;
 static bool isMDP5 = false;
 static int leftSplit = 0;
@@ -62,28 +59,6 @@ static int rightSplit = 0;
 #define ALIGN(x, align) (((x) + ((align)-1)) & ~((align)-1))
 
 static size_t frame_size = 0;
-
-#ifdef PRINT_SCREENINFO
-static void print_fb_fixed_screeninfo()
-{
-    printf("fi.id: %s\n", fi.id);
-    printf("fi.smem_start: %ul\n", fi.smem_start);
-    printf("fi.smem_len: %ul\n", fi.smem_len);
-    printf("fi.line_length: %ul\n", fi.line_length);
-}
-
-static void print_fb_var_screeninfo()
-{
-    printf("vi.xres: %d\n", vi.xres);
-    printf("vi.yres: %d\n", vi.yres);
-    printf("vi.xres_virtual: %d\n", vi.xres_virtual);
-    printf("vi.yres_virtual: %d\n", vi.yres_virtual);
-    printf("vi.xoffset: %d\n", vi.xoffset);
-    printf("vi.yoffset: %d\n", vi.yoffset);
-    printf("vi.bits_per_pixel: %d\n", vi.bits_per_pixel);
-    printf("vi.grayscale: %d\n", vi.grayscale);
-}
-#endif
 
 #ifdef MSM_BSP
 typedef struct {
@@ -160,10 +135,6 @@ minui_backend* open_overlay() {
         close(fd);
         return NULL;
     }
-
-#ifdef PRINT_SCREENINFO
-    print_fb_fixed_screeninfo();
-#endif
 
     if (target_has_overlay(fi.id)) {
 #ifdef MSM_BSP
@@ -353,7 +324,7 @@ int allocate_overlay(int fd, GRSurface gr_fb)
             overlayL.dst_rect.h = gr_fb.height;
             overlayL.alpha = 0xFF;
             // If this worked, life would have been so much easier
-            //switch (TW_ROTATION) {
+            //switch (gr_rotation) {
                 //case   0:  overlayL.flags = MDP_ROT_NOP; break;
                 //case  90:  overlayL.flags = MDP_ROT_90;  break;
                 //case 180:  overlayL.flags = MDP_ROT_180; break;
@@ -397,7 +368,7 @@ int allocate_overlay(int fd, GRSurface gr_fb)
             overlayL.dst_rect.h = height;
             overlayL.alpha = 0xFF;
             // If this worked, life would have been so much easier
-            //switch (TW_ROTATION) {
+            //switch (gr_rotation) {
                 //case   0:  overlayL.flags = MDP_ROT_NOP; break;
                 //case  90:  overlayL.flags = MDP_ROT_90;  break;
                 //case 180:  overlayL.flags = MDP_ROT_180; break;
@@ -432,7 +403,7 @@ int allocate_overlay(int fd, GRSurface gr_fb)
             overlayR.alpha = 0xFF;
             overlayR.flags = MDSS_MDP_RIGHT_MIXER;
             // If this worked, life would have been so much easier
-            //switch (TW_ROTATION) {
+            //switch (gr_rotation) {
                 //case   0:  overlayR.flags |= MDP_ROT_NOP; break;
                 //case  90:  overlayR.flags |= MDP_ROT_90;  break;
                 //case 180:  overlayR.flags |= MDP_ROT_180; break;
@@ -609,10 +580,6 @@ static GRSurface* overlay_init(minui_backend* backend) {
         close(fd);
         return NULL;
     }
-
-#ifdef PRINT_SCREENINFO
-    print_fb_var_screeninfo();
-#endif
 
     // We print this out for informational purposes only, but
     // throughout we assume that the framebuffer device uses an RGBX

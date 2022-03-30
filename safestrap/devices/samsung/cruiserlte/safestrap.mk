@@ -1,7 +1,5 @@
 include $(commands_TWRP_local_path)/safestrap/devices/samsung/msm8998-common/safestrap-msm8998-common.mk
 
-SS_TWRP_PRINT_SCREENINFO := true
-
 TW_CRYPTO_REAL_BLKDEV := "/dev/block/sda24"
 
 # Virtual partition size default (in mb)
