@@ -12,12 +12,13 @@ CURRENT_USER_DIR=/data
 ALT_SYSTEM_MODE="0"
 RUN_SS="0"
 RECOVERY_BOOT=$(cat /proc/cmdline | $RECOVERY_DIR/bbx grep -c "androidboot.boot_recovery=1")
-CHARGER_BOOT=$(cat /proc/cmdline | $RECOVERY_DIR/bbx grep -c "androidboot.bootchg=true")
+CHARGER_BOOT=$(cat /proc/cmdline | $RECOVERY_DIR/bbx grep -c "androidboot.mode=charger")
+BOOTCHG_BOOT=$(cat /proc/cmdline | $RECOVERY_DIR/bbx grep -c "androidboot.bootchg=true")
 
-# check cmdline for androidboot.mode=charger
 # check cmdline for androidboot.boot_recovery=1
 if [ "$RECOVERY_BOOT" -ne "1" ]; then
-if [ "$CHARGER_BOOT" -ne "1" ]; then
+# check cmdline for androidboot.mode=charger or androidboot.bootchg=true
+if [ "$CHARGER_BOOT" -ne "1" ] || [ "$BOOTCHG_BOOT" -ne "1" ]; then
 if [ ! -f "$SS_CHECK_FILE" ]; then
 	# startup safestrap
 	RUN_SS="1"
@@ -49,8 +50,9 @@ if [ "$RUN_SS" = "1" ]; then
 	fi
 
 	# set backlight
-	# HASH: this *could* blow up S5, it does N3
-#	$BBX echo $BACKLIGHT_BRIGHTNESS_VALUE > $BACKLIGHT_BRIGHTNESS_PATH
+	if [ "$SS_SET_BACKLIGHT" = "1" ]; then
+		$BBX echo $BACKLIGHT_BRIGHTNESS_VALUE > $BACKLIGHT_BRIGHTNESS_PATH
+	fi
 
 	# create SS loopdevs
 	$BBX mknod -m600 /dev/block/loop-system b 7 99
@@ -131,6 +133,8 @@ if [ "$RUN_SS" = "1" ]; then
 
 	# set /dev/ion permissions
 	$BBX chmod 666 /dev/ion
+	# turn on hard button backlight
+	$BBX echo 200 > /sys/class/leds/button-backlight/brightness
 
 	ENTER_RECOVERY="0"
 	CHECK_RECOVERY_ENTRY="1"
@@ -149,11 +153,18 @@ if [ "$RUN_SS" = "1" ]; then
 	fi
 
 	if [ "$ENTER_RECOVERY" = "1" ]; then
-		# HASH: Hacky here.  We need to setup the framebuffer
-		$RECOVERY_DIR/safestrapmenu 2 1
+		# turn off hard button backlight
+		$BBX echo 0 > /sys/class/leds/button-backlight/brightness
 
-		# HASH: Another KK Hack.  /system is mounted RO by default, remount here for the future
+		# HASH: Hacky here. We need to setup the framebuffer
+		if [ "$SS_SET_FRAMEBUFFER" = "1" ]; then
+			$RECOVERY_DIR/safestrapmenu 2 1
+		fi
+
+		# HASH: Another KK+ Hack. /system, /vendor and /odm are mounted RO by default, remount here for the future
 		mount -o remount,rw /system
+		mount -o remount,rw /vendor
+		mount -o remount,rw /odm
 
 		# filesystem cleanup
 		$BBX rm /d
@@ -169,11 +180,12 @@ if [ "$RUN_SS" = "1" ]; then
 		$BBX mv /init /init.old
 
 		# backup selinux/prop files
-		$BBX cp /file_contexts /tmp/
+		$BBX cp /file_contexts* /tmp/
 		$BBX cp /property_contexts /tmp/
 		$BBX cp /seapp_contexts /tmp/
 		$BBX cp /sepolicy /tmp/
 		$BBX cp /sepolicy_version /tmp/
+		$BBX cp /service_contexts /tmp/
 		$BBX echo "ro.secure=0" > /tmp/default.prop
 		$BBX echo "ro.allow.mock.location=1" >> /tmp/default.prop
 		$BBX echo "ro.debuggable=1" >> /tmp/default.prop
@@ -201,6 +213,8 @@ if [ "$RUN_SS" = "1" ]; then
 
 		# unmount partitions
 		$BBX umount -l /system
+		$BBX umount -l /vendor
+		$BBX umount -l /odm
 		$BBX umount $SS_MNT
 		if [ "$SS_USE_DATAMEDIA" = "1" ]; then
 			$BBX umount $DATAMEDIA_MNT
@@ -216,6 +230,9 @@ if [ "$RUN_SS" = "1" ]; then
 		echo "<1>$(/sbin/taskset -c 0 /sbin/2nd-init)" > /dev/kmsg
 		exit
 	fi
+
+	# turn off hard button backlight
+	$BBX echo 0 > /sys/class/leds/button-backlight/brightness
 
 	# either way we mount virtual "system" or real "system" and check for:
 	# 1. /system/etc/rootfs (2nd-init boot)
@@ -278,8 +295,10 @@ if [ "$RUN_SS" = "1" ]; then
 
 		# check for alt-system or rootfs files
 		if [ "$ALT_SYSTEM_MODE" = "1" ] || [ -d "$CURRENT_SYS_DIR/etc/rootfs" ]; then
-			# HASH: Another KK Hack.  System is default mounted RO, need to remount here for the future
+			# HASH: Another KK+ Hack. /system, /vendor and /odm are mounted RO by default, remount here for the future
 			mount -o remount,rw /system
+			mount -o remount,rw /vendor
+			mount -o remount,rw /odm
 
 			# BEGIN CLEANUP TODO: this should really be a device independant cleanup file
 			if [ -d "$RECOVERY_DIR/rootfs" ]; then
@@ -300,6 +319,7 @@ if [ "$RUN_SS" = "1" ]; then
 			$BBX cp -R $CURRENT_SYS_DIR/etc/rootfs/* /
 
 			# set loglevel
+			$BBX sed -i "s/loglevel \${sys.init_log_level}/loglevel 8/" /init.rc
 			$BBX sed -i "s/loglevel 3/loglevel 8/" /init.rc
 
 			# adjust stock init.target.rc file to include /sbin/fixboot.sh
@@ -332,6 +352,8 @@ if [ "$RUN_SS" = "1" ]; then
 
 			# unmount old /system
 			$BBX umount -l /system
+			$BBX umount -l /vendor
+			$BBX umount -l /odm
 
 			/sbin/hijack.killall
 
@@ -373,4 +395,3 @@ fi
 $BBX echo "<1>Passing through hijack: /system/$HIJACK_LOC/$HIJACK_BIN.bin $@" > /dev/kmsg
 
 /system/$HIJACK_LOC/$HIJACK_BIN.bin "$@"
-
