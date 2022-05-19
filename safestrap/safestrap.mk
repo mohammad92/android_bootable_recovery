@@ -1,3 +1,6 @@
+# Safestrap location
+SS_LOC=etc
+
 # safestrap
 ifeq ($(SS_PRODUCT_MANUFACTURER), )
     SS_PRODUCT_MANUFACTURER := $(shell echo $(PRODUCT_MANUFACTURER) | tr '[A-Z]' '[a-z]')
