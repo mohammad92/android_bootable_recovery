@@ -23,7 +23,7 @@
 #define TW_RECOVERY_NAME            "TWRP"
 #define TW_DEFAULT_RECOVERY_FOLDER  "/" TW_RECOVERY_NAME
 #ifdef BUILD_SAFESTRAP
-#define SS_VERSION_STR              "4.13"
+#define SS_VERSION_STR              "4.14"
 #endif
 #define TW_USE_COMPRESSION_VAR      "tw_use_compression"
 #define TW_FILENAME                 "tw_filename"
